@@ -19,7 +19,7 @@ describe 'artifactory' do
           it { is_expected.to contain_class('artifactory') }
           case os_facts[:os]['family']
           when 'Debian'
-            it { is_expected.to contain_class('artifactory::repo::debian') }
+            it { is_expected.to contain_class('artifactory::repo::apt') }
             it {
               is_expected.to contain_apt__source('artifactory').with(
                                'location' => 'https://releases.jfrog.io/artifactory/artifactory-debs',

@@ -10,7 +10,7 @@ class artifactory::repo () {
       }
 
       'Debian': {
-        contain artifactory::repo::debian
+        contain artifactory::repo::apt
       }
 
       default: {

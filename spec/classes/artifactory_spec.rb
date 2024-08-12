@@ -24,7 +24,7 @@ describe 'artifactory' do
               is_expected.to contain_apt__source('artifactory').with(
                                'location' => 'https://releases.jfrog.io/artifactory/artifactory-debs',
                                'release'  => os_facts[:os]['distro']['codename'],
-                               'repos'    => 'main'
+                               'repos'    => 'main',
                              )
             }
           else
@@ -275,7 +275,6 @@ describe 'artifactory' do
             is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/artifactory/binarystore.xml').with_content(%r{<useInstanceCredentials>true</useInstanceCredentials>})
           }
         end
-
       end
     end
   end

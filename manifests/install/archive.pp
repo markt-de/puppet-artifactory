@@ -13,7 +13,7 @@ class artifactory::install::archive {
       $url = $artifactory::download_url_pro
     }
     default : {
-      fail("install method ${install_method} does not support edition ${artifactory::edition}")
+      fail("install method ${artifactory::install_method} does not support edition ${artifactory::edition}")
     }
   }
 
@@ -49,7 +49,7 @@ class artifactory::install::archive {
     subscribe   => [
       Archive[$archive_file],
     ],
-    require => [
+    require     => [
       Archive[$archive_file],
     ],
   }
@@ -59,10 +59,10 @@ class artifactory::install::archive {
   # script handles user/group creation. Hence this directory must
   # not be altered anymore after initial creation.
   $command = join([
-    # Create the data directory.
-    "mkdir -p ${artifactory::data_directory}",
-    # "Initialize" data directory once by copying files from new installation.
-    "&& mv ${install_dir}/var/* ${artifactory::data_directory}/",
+      # Create the data directory.
+      "mkdir -p ${artifactory::data_directory}",
+      # "Initialize" data directory once by copying files from new installation.
+      "&& mv ${install_dir}/var/* ${artifactory::data_directory}/",
   ], ' ')
   exec { 'create data directory':
     path    => '/usr/bin:/bin:/usr/local/bin:/usr/sbin:/sbin:/usr/local/sbin',

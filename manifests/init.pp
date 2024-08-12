@@ -13,7 +13,7 @@
 # @param download_url_oss
 #   The download URL for the open-source edition.
 #
-# @param download_url_oss
+# @param download_url_pro
 #   The download URL for the pro edition.
 #
 # @param install_method
@@ -26,7 +26,7 @@
 #   Controls the name of a version-independent symlink for the archive
 #   installation. It will always point to the release specified by `$package_version`.
 #
-class artifactory(
+class artifactory (
   Enum['oss', 'pro', 'enterprise'] $edition                                                = 'oss',
   Boolean $manage_repo                                                                     = true,
   Boolean $use_temp_db_secrets                                                             = true,
@@ -79,8 +79,8 @@ class artifactory(
     $data_directory = $archive_data_dir
   }
 
-  Class{'::artifactory::repo': }
-  -> class{'::artifactory::install': }
-  -> class{'::artifactory::config': }
-  -> class{'::artifactory::service': }
+  Class { 'artifactory::repo': }
+  -> Class { 'artifactory::install': }
+  -> Class { 'artifactory::config': }
+  -> Class { 'artifactory::service': }
 }

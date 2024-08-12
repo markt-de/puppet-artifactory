@@ -12,5 +12,8 @@ class artifactory::install {
       contain artifactory::install::archive
       Class['artifactory::install::archive']
     }
+    default : {
+      fail("install method ${artifactory::install_method} is not supported")
+    }
   }
 }

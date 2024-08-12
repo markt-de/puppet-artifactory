@@ -3,7 +3,7 @@
 class artifactory::repo () {
   assert_private()
 
-  if $::artifactory::manage_repo {
+  if $artifactory::manage_repo {
     case $facts['os']['family'] {
       'RedHat', 'Linux': {
         contain artifactory::repo::yum

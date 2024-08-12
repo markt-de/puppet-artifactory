@@ -7,7 +7,7 @@ class artifactory::config {
   # When no version number is specified, we have no choice but to guess.
   # Future versions of this module should enforce setting a version number.
   if ($artifactory::package_version =~ Enum['present','installed','latest']) {
-    notify {'Specifying a version number in $artifactory::package_version is strongly recommended': loglevel => warning }
+    notify { 'Specifying a version number in $artifactory::package_version is strongly recommended': loglevel => warning }
     $_legacy = true
   } elsif (versioncmp($artifactory::package_version, '7.0') >= 0) {
     $_legacy = false
@@ -38,20 +38,20 @@ class artifactory::config {
     'fullDb' => 'full-db',
     'cachedFS' => 'cache-fs',
     'fullDbDirect' => 'full-db-direct',
-    's3' => 's3-storage-v3'
+    's3' => 's3-storage-v3',
   }
 
   # Check if a value was provided that need to be replaced.
-  if $::artifactory::binary_provider_type and $_types[$::artifactory::binary_provider_type] {
-    $_binary_provider_type = $_types[$::artifactory::binary_provider_type]
+  if $artifactory::binary_provider_type and $_types[$artifactory::binary_provider_type] {
+    $_binary_provider_type = $_types[$artifactory::binary_provider_type]
   } else {
     # Use the option unmodified.
-    $_binary_provider_type = $::artifactory::binary_provider_type
+    $_binary_provider_type = $artifactory::binary_provider_type
   }
 
   # Determine the base type of the binary provider by grouping similar
   # types. Required to determine the directory in the next step.
-  case $_types[$::artifactory::binary_provider_type] {
+  case $_types[$artifactory::binary_provider_type] {
     'file-system',
     'full-db',
     'cache-fs',
@@ -67,43 +67,37 @@ class artifactory::config {
   }
 
   # Determine the directory for the chosen binary provider.
-  if ($binary_provider_type == 'file-system') and ! $::artifactory::binary_provider_filesystem_dir {
-    if $::artifactory::binary_provider_base_data_dir {
-      $binary_provider_filesystem_dir = "${::artifactory::binary_provider_base_data_dir}/filestore"
+  if ($binary_provider_type == 'file-system') and ! $artifactory::binary_provider_filesystem_dir {
+    if $artifactory::binary_provider_base_data_dir {
+      $binary_provider_filesystem_dir = "${artifactory::binary_provider_base_data_dir}/filestore"
     } else {
       $binary_provider_filesystem_dir = undef
     }
-  } elsif ($binary_provider_type == 'file-system') and $::artifactory::binary_provider_filesystem_dir {
-    $binary_provider_filesystem_dir = $::artifactory::binary_provider_filesystem_dir
+  } elsif ($binary_provider_type == 'file-system') and $artifactory::binary_provider_filesystem_dir {
+    $binary_provider_filesystem_dir = $artifactory::binary_provider_filesystem_dir
   } else {
     $binary_provider_filesystem_dir = undef
   }
 
   # Check if a DB configuration was provided.
-  if ($::artifactory::db_url or
-      $::artifactory::db_username or
-      $::artifactory::db_password or
-      $::artifactory::db_type) {
-
+  if ($artifactory::db_url or $artifactory::db_username or $artifactory::db_password
+  or $artifactory::db_type) {
     # Check if all database parameters can be found.
-    if ($::artifactory::db_url and
-        $::artifactory::db_username and
-        $::artifactory::db_password and
-        $::artifactory::db_type) {
-
+    if ($artifactory::db_url and $artifactory::db_username and $artifactory::db_password
+    and $artifactory::db_type) {
       # Download JDBC files.
-      if ($::artifactory::jdbc_driver_url) {
-        $file_name =  regsubst($::artifactory::jdbc_driver_url, '.+\/([^\/]+)$', '\1')
+      if ($artifactory::jdbc_driver_url) {
+        $file_name =  regsubst($artifactory::jdbc_driver_url, '.+\/([^\/]+)$', '\1')
 
         file { "${_lib_dir}/${file_name}":
-          source => $::artifactory::jdbc_driver_url,
+          source => $artifactory::jdbc_driver_url,
           mode   => '0775',
           owner  => 'root',
         }
       }
 
       # Determine type of database.
-      $db_driver = $::artifactory::db_type ? {
+      $db_driver = $artifactory::db_type ? {
         'derby'      => 'org.apache.derby.jdbc.EmbeddedDriver',
         'mariadb'    => 'org.mariadb.jdbc.Driver',
         'mssql'      => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
@@ -115,27 +109,27 @@ class artifactory::config {
 
       # Prepare options hash. Will later be used to setup DB configuration.
       $__dbpropchanges = {
-        'type'                           => $::artifactory::db_type,
-        'url'                            => $::artifactory::db_url,
+        'type'                           => $artifactory::db_type,
+        'url'                            => $artifactory::db_url,
         'driver'                         => $db_driver,
-        'username'                       => $::artifactory::db_username,
+        'username'                       => $artifactory::db_username,
         'binary.provider.type'           => $binary_provider_type,
-        'pool.max.active'                => $::artifactory::pool_max_active,
-        'pool.max.idle'                  => $::artifactory::pool_max_idle,
-        'binary.provider.cache.maxsize'  => $::artifactory::binary_provider_cache_maxsize,
+        'pool.max.active'                => $artifactory::pool_max_active,
+        'pool.max.idle'                  => $artifactory::pool_max_idle,
+        'binary.provider.cache.maxsize'  => $artifactory::binary_provider_cache_maxsize,
         'binary.provider.filesystem.dir' => $binary_provider_filesystem_dir,
-        'binary.provider.cache_dir'      => $::artifactory::binary_provider_cache_dir,
+        'binary.provider.cache_dir'      => $artifactory::binary_provider_cache_dir,
       }
       # We only care to set values that have actually been defined.
       # Therefore remove empty ones from our collection.
       $_dbpropchanges = delete_undef_values($__dbpropchanges)
 
       # Pre-load secrets from a temporary file when starting up Artifctory.
-      if $::artifactory::use_temp_db_secrets {
+      if $artifactory::use_temp_db_secrets {
         file { $_secrets_dir:
           ensure => directory,
-          owner  => $::artifactory::config_owner,
-          group  => $::artifactory::config_group,
+          owner  => $artifactory::config_owner,
+          group  => $artifactory::config_group,
         }
 
         file { "${$_secrets_dir}/.temp.db.properties":
@@ -143,23 +137,23 @@ class artifactory::config {
           content => epp(
             'artifactory/db.properties.epp',
             {
-              db_url                         => $::artifactory::db_url,
-              db_username                    => $::artifactory::db_username,
-              db_password                    => $::artifactory::db_password,
-              db_type                        => $::artifactory::db_type,
+              db_url                         => $artifactory::db_url,
+              db_username                    => $artifactory::db_username,
+              db_password                    => $artifactory::db_password,
+              db_type                        => $artifactory::db_type,
               db_driver                      => $db_driver,
               binary_provider_type           => $binary_provider_type,
-              pool_max_active                => $::artifactory::pool_max_active,
-              pool_max_idle                  => $::artifactory::pool_max_idle,
-              binary_provider_cache_maxsize  => $::artifactory::binary_provider_cache_maxsize,
-              binary_provider_base_data_dir  => $::artifactory::binary_provider_base_data_dir,
+              pool_max_active                => $artifactory::pool_max_active,
+              pool_max_idle                  => $artifactory::pool_max_idle,
+              binary_provider_cache_maxsize  => $artifactory::binary_provider_cache_maxsize,
+              binary_provider_base_data_dir  => $artifactory::binary_provider_base_data_dir,
               binary_provider_filesystem_dir => $binary_provider_filesystem_dir,
-              binary_provider_cache_dir      => $::artifactory::binary_provider_cache_dir,
+              binary_provider_cache_dir      => $artifactory::binary_provider_cache_dir,
             }
           ),
           mode    => '0640',
-          owner   => $::artifactory::config_owner,
-          group   => $::artifactory::config_group,
+          owner   => $artifactory::config_owner,
+          group   => $artifactory::config_group,
         }
 
         # Setup a symlink for legacy versions.
@@ -182,8 +176,8 @@ class artifactory::config {
           file { "${artifactory::data_directory}/etc/db.properties":
             ensure => file,
             mode   => '0640',
-            owner  => $::artifactory::config_owner,
-            group  => $::artifactory::config_group,
+            owner  => $artifactory::config_owner,
+            group  => $artifactory::config_group,
           }
           file { "${artifactory::data_directory}/etc/storage.properties":
             ensure => link,
@@ -192,9 +186,9 @@ class artifactory::config {
 
           # Prepare DB hash for use with Augeas.
           $dbpropchanges = $_dbpropchanges.reduce([]) | $memo, $value | {
-          # lint:ignore:140chars
+            # lint:ignore:140chars
             $memo + "set \"${value[0]}\" \"${value[1]}\""
-          # lint:endignore
+            # lint:endignore
           }
 
           # Setup database configuration in db.properties.
@@ -203,8 +197,8 @@ class artifactory::config {
             incl    => "${artifactory::data_directory}/etc/db.properties",
             lens    => 'Properties.lns',
             changes => $dbpropchanges,
-            require => [Class['::artifactory::install']],
-            notify  => Class['::artifactory::service'],
+            require => [Class['artifactory::install']],
+            notify  => Class['artifactory::service'],
           }
 
           # We treat db_password differently
@@ -217,10 +211,10 @@ class artifactory::config {
             context => "/files${artifactory::data_directory}/etc/db.properties",
             incl    => "${artifactory::data_directory}/etc/db.properties",
             lens    => 'Properties.lns',
-            changes => [ "set \"password\" \"${::artifactory::db_password}\"" ],
+            changes => ["set \"password\" \"${artifactory::db_password}\""],
             onlyif  => "match /files${artifactory::data_directory}/etc/db.properties/password size == 0",
-            require => [Class['::artifactory::install']],
-            notify  => Class['::artifactory::service'],
+            require => [Class['artifactory::install']],
+            notify  => Class['artifactory::service'],
           }
         }
       }
@@ -228,7 +222,7 @@ class artifactory::config {
     else {
       # We are making an assumption that not passing db_username and db_password we are changing to derby
       # and do not need db.properties file, but least be explicit in cleaning up.
-      if ($_legacy == true) and ($::artifactory::db_type == 'derby') {
+      if ($_legacy == true) and ($artifactory::db_type == 'derby') {
         file { "${artifactory::data_directory}/etc/db.properties":
           ensure  => absent,
         }
@@ -240,52 +234,52 @@ class artifactory::config {
   # Configure the filestore.
   file { "${_config_dir}/binarystore.xml":
     ensure  => file,
-    owner   => $::artifactory::config_owner,
-    group   => $::artifactory::config_group,
+    owner   => $artifactory::config_owner,
+    group   => $artifactory::config_group,
     content => epp(
       'artifactory/binarystore.xml.epp',
       {
         binary_provider_type           => $_binary_provider_type,
-        binary_provider_cache_maxsize  => $::artifactory::binary_provider_cache_maxsize,
-        binary_provider_base_data_dir  => $::artifactory::binary_provider_base_data_dir,
+        binary_provider_cache_maxsize  => $artifactory::binary_provider_cache_maxsize,
+        binary_provider_base_data_dir  => $artifactory::binary_provider_base_data_dir,
         binary_provider_filesystem_dir => $binary_provider_filesystem_dir,
-        binary_provider_cache_dir      => $::artifactory::binary_provider_cache_dir,
-        binary_provider_config_hash    => $::artifactory::binary_provider_config_hash,
+        binary_provider_cache_dir      => $artifactory::binary_provider_cache_dir,
+        binary_provider_config_hash    => $artifactory::binary_provider_config_hash,
       }
     ),
     notify  => Class['artifactory::service'],
   }
 
   # Install master key.
-  if ($::artifactory::master_key) {
+  if ($artifactory::master_key) {
     file { $_security_dir:
       ensure => directory,
-      owner  => $::artifactory::config_owner,
-      group  => $::artifactory::config_group,
+      owner  => $artifactory::config_owner,
+      group  => $artifactory::config_group,
     }
 
     file { "${_security_dir}/master.key":
       ensure  => file,
-      content => $::artifactory::master_key,
+      content => $artifactory::master_key,
       mode    => '0640',
-      owner   => $::artifactory::config_owner,
-      group   => $::artifactory::config_group,
+      owner   => $artifactory::config_owner,
+      group   => $artifactory::config_group,
       notify  => Class['artifactory::service'],
     }
   }
 
   # Install license key for commercial edition.
-  if ($::artifactory::license_key) {
+  if ($artifactory::license_key) {
     file { "${_license_dir}/artifactory.lic":
       ensure  => file,
-      content => $::artifactory::license_key,
+      content => $artifactory::license_key,
       mode    => '0664',
     }
   }
 
   # Automatically setup the database server.
-  if ($::artifactory::db_automate) and ($::artifactory::db_type == 'mysql') {
-    include ::artifactory::mysql
+  if ($artifactory::db_automate) and ($artifactory::db_type == 'mysql') {
+    include artifactory::mysql
 
     file_line { 'limits':
       ensure => present,
@@ -293,6 +287,6 @@ class artifactory::config {
       line   => "artifactory soft nofile 32000 \n artifactory hard nofile 32000",
       notify => Class['artifactory::service'],
     }
-    contain ::mysql::server
+    contain mysql::server
   }
 }

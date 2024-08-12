@@ -11,6 +11,6 @@ class artifactory::install::package {
   }
 
   package { $_package:
-    ensure  => $::artifactory::package_version,
+    ensure  => $artifactory::package_version,
   }
 }

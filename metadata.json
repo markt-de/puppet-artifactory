@@ -1,12 +1,12 @@
 {
-  "name": "fervid-artifactory",
+  "name": "markt-artifactory",
   "version": "3.0.5",
-  "author": "Fervid",
-  "summary": "Installs and configures Artifactory OSS",
+  "author": "markt.de",
+  "summary": "Install and configure JFrog Artifactory",
   "license": "Apache-2.0",
-  "source": "https://github.com/fervidus/artifactory.git",
-  "project_page": "https://github.com/fervidus/artifactory",
-  "issues_url": "https://github.com/fervidus/artifactory/issues",
+  "source": "https://github.com/markt-de/puppet-artifactory",
+  "project_page": "https://github.com/markt-de/puppet-artifactory",
+  "issues_url": "https://github.com/markt-de/puppet-artifactory/issues",
   "dependencies": [
     {
       "name": "puppetlabs/apt",

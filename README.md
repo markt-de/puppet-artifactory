@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/fervid/artifactory.svg?branch=master)](https://travis-ci.org/fervid/artifactory)
-[![Puppet Forge](https://img.shields.io/puppetforge/v/fervid/artifactory.svg)](https://forge.puppetlabs.com/fervid/artifactory)
-[![Puppet Forge](https://img.shields.io/puppetforge/f/fervid/artifactory.svg)](https://forge.puppetlabs.com/fervid/artifactory)
+# puppet-artifactory
+
+[![Build Status](https://github.com/markt-de/puppet-artifactory/actions/workflows/ci.yaml/badge.svg)](https://github.com/markt-de/puppet-artifactory/actions/workflows/ci.yaml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/markt/artifactory.svg)](https://forge.puppetlabs.com/markt/artifactory)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/markt/artifactory.svg)](https://forge.puppetlabs.com/markt/artifactory)
 
 #### Table of Contents
 
@@ -18,10 +20,6 @@
 
 This will install Artifactory OSS or PRO.
 Artifactory 7+ is supported, legacy support for Artifactory 6 is still available.
-
-If you are looking for the HA installation look at:
-
-Artifactory HA: <https://forge.puppet.com/fervid/artifactory_ha>
 
 Github and gitlab are great for storing source control, but bad at storing installers and compiled packages.
 
@@ -261,7 +259,3 @@ This module has been tested on:
 ## Development
 
 Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
-
-### Contributors
-
-To see who's already involved, see the [list of contributors.](https://github.com/fervid/artifactory/graphs/contributors)

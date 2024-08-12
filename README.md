@@ -68,7 +68,7 @@ class { '::artifactory':
 ### Artifactory with PostgreSQL database
 
 This installs PostgreSQL 11 and artifactory. PostgreSQL 12 isn't supported yet
-by Artifactory. This code is tested on CentOS 7.
+by Artifactory.
 
 ```puppet
 class {'postgresql::globals':
@@ -248,13 +248,6 @@ Optional argument to set the ownership of the configuration files.
 ##### `config_group`
 
 Optional argument to set the group of the configuration files.
-
-## Limitations
-
-This module has been tested on:
-
-* RedHat Enterprise Linux 5, 6, 7, 8
-* CentOS 5, 6, 7, 8
 
 ## Development
 

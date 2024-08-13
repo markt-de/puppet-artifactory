@@ -1,6 +1,6 @@
 {
   "name": "markt-artifactory",
-  "version": "3.0.5",
+  "version": "4.0.0",
   "author": "markt.de",
   "summary": "Install and configure JFrog Artifactory",
   "license": "Apache-2.0",

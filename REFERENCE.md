@@ -69,6 +69,7 @@ The following parameters are available in the `artifactory` class:
 * [`pool_max_active`](#-artifactory--pool_max_active)
 * [`pool_max_idle`](#-artifactory--pool_max_idle)
 * [`root_password`](#-artifactory--root_password)
+* [`service_name`](#-artifactory--service_name)
 * [`symlink_name`](#-artifactory--symlink_name)
 * [`use_temp_db_secrets`](#-artifactory--use_temp_db_secrets)
 * [`yum_baseurl`](#-artifactory--yum_baseurl)
@@ -77,43 +78,43 @@ The following parameters are available in the `artifactory` class:
 
 ##### <a name="-artifactory--apt_baseurl"></a>`apt_baseurl`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the URL of the APT repository.
 
-Default value: `'https://releases.jfrog.io/artifactory/artifactory-debs'`
+Default value: `undef`
 
 ##### <a name="-artifactory--apt_baseurl_pro"></a>`apt_baseurl_pro`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the URL of the APT repository (Pro edition).
 
-Default value: `'https://releases.jfrog.io/artifactory/artifactory-pro-debs'`
+Default value: `undef`
 
 ##### <a name="-artifactory--apt_key_id"></a>`apt_key_id`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the ID of the APT repository key.
 
-Default value: `'A3D085F542F740BBD7E3A2846B219DCCD7639232'`
+Default value: `undef`
 
 ##### <a name="-artifactory--apt_key_source"></a>`apt_key_source`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the URL of the APT repository.
 
-Default value: `'https://releases.jfrog.io/artifactory/api/gpg/key/public'`
+Default value: `undef`
 
 ##### <a name="-artifactory--apt_repos"></a>`apt_repos`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the names of the APT repositories to enable.
 
-Default value: `'main'`
+Default value: `undef`
 
 ##### <a name="-artifactory--archive_data_dir"></a>`archive_data_dir`
 
@@ -121,23 +122,17 @@ Data type: `Stdlib::Absolutepath`
 
 The Artifactory data directory that should be used for archive installations.
 
-Default value: `'/opt/artifactory-data'`
-
 ##### <a name="-artifactory--archive_install_dir"></a>`archive_install_dir`
 
 Data type: `Stdlib::Absolutepath`
 
 The Artifactory app directory that should be used for archive installations.
 
-Default value: `'/opt'`
-
 ##### <a name="-artifactory--artifactory_home"></a>`artifactory_home`
 
 Data type: `String`
 
 Specifies the main directory.
-
-Default value: `'/var/opt/jfrog/artifactory'`
 
 ##### <a name="-artifactory--binary_provider_base_data_dir"></a>`binary_provider_base_data_dir`
 
@@ -194,27 +189,21 @@ Default value: `undef`
 
 ##### <a name="-artifactory--config_group"></a>`config_group`
 
-Data type: `Optional[String]`
+Data type: `String`
 
 Specifies the group owner of the configuration files.
 
-Default value: `'artifactory'`
-
 ##### <a name="-artifactory--config_owner"></a>`config_owner`
 
-Data type: `Optional[String]`
+Data type: `String`
 
 Specifies the owner of the configuration files.
 
-Default value: `'artifactory'`
-
 ##### <a name="-artifactory--db_automate"></a>`db_automate`
 
-Data type: `Optional[Boolean]`
+Data type: `Boolean`
 
 Set to 'true' to let Puppet create a database (instance). Only supports MySQL.
-
-Default value: `false`
 
 ##### <a name="-artifactory--db_password"></a>`db_password`
 
@@ -254,15 +243,11 @@ Data type: `String`
 
 The filename of the archive distribution.
 
-Default value: `'jfrog-artifactory-%s-%s-linux.tar.gz'`
-
 ##### <a name="-artifactory--download_url_oss"></a>`download_url_oss`
 
 Data type: `String`
 
 The download URL for the open-source edition.
-
-Default value: `'https://releases.jfrog.io/artifactory/bintray-artifactory/org/artifactory/oss/jfrog-artifactory-oss/%s/%s'`
 
 ##### <a name="-artifactory--download_url_pro"></a>`download_url_pro`
 
@@ -270,15 +255,11 @@ Data type: `String`
 
 The download URL for the pro edition.
 
-Default value: `'https://releases.jfrog.io/artifactory/artifactory-pro/org/artifactory/pro/jfrog-artifactory-pro/%s/%s'`
-
 ##### <a name="-artifactory--edition"></a>`edition`
 
 Data type: `Enum['oss', 'pro', 'enterprise']`
 
 Specifies the Artifactory edition/license.
-
-Default value: `'oss'`
 
 ##### <a name="-artifactory--install_method"></a>`install_method`
 
@@ -286,15 +267,11 @@ Data type: `String`
 
 Whether to use a package or an archive to install artifactory.
 
-Default value: `'package'`
-
 ##### <a name="-artifactory--install_service_script"></a>`install_service_script`
 
 Data type: `String`
 
 Path to the installation script of the archive distribution.
-
-Default value: `'app/bin/installService.sh'`
 
 ##### <a name="-artifactory--jdbc_driver_url"></a>`jdbc_driver_url`
 
@@ -318,8 +295,6 @@ Data type: `Boolean`
 
 Whether to setup required repos or disable repo management.
 
-Default value: `true`
-
 ##### <a name="-artifactory--master_key"></a>`master_key`
 
 Data type: `Optional[String]`
@@ -337,23 +312,17 @@ Data type: `String`
 
 Sets the package name to install.
 
-Default value: `'jfrog-artifactory-oss'`
-
 ##### <a name="-artifactory--package_name_pro"></a>`package_name_pro`
 
 Data type: `String`
 
 Sets the package name to install (Pro edition).
 
-Default value: `'jfrog-artifactory-pro'`
-
 ##### <a name="-artifactory--package_version"></a>`package_version`
 
 Data type: `String`
 
 Specifies the package version.
-
-Default value: `'present'`
 
 ##### <a name="-artifactory--pool_max_active"></a>`pool_max_active`
 
@@ -373,11 +342,15 @@ Default value: `undef`
 
 ##### <a name="-artifactory--root_password"></a>`root_password`
 
-Data type: `Optional[String]`
+Data type: `String`
 
 Sets the root password for Puppet managed mysql database instance.
 
-Default value: `'password'`
+##### <a name="-artifactory--service_name"></a>`service_name`
+
+Data type: `String`
+
+Specifies the name of the Artifactory system service.
 
 ##### <a name="-artifactory--symlink_name"></a>`symlink_name`
 
@@ -385,8 +358,6 @@ Data type: `String`
 
 Controls the name of a version-independent symlink for the archive
 installation. It will always point to the release specified by `$package_version`.
-
-Default value: `'artifactory'`
 
 ##### <a name="-artifactory--use_temp_db_secrets"></a>`use_temp_db_secrets`
 
@@ -397,29 +368,27 @@ Set to `false` to persist the file in `$artifactory_home/etc/db.properties`,
 which will allow to add database and storage options without Puppet
 touching it.
 
-Default value: `true`
-
 ##### <a name="-artifactory--yum_baseurl"></a>`yum_baseurl`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the URL of the yum repository.
 
-Default value: `'https://jfrog.bintray.com/artifactory-rpms'`
+Default value: `undef`
 
 ##### <a name="-artifactory--yum_baseurl_pro"></a>`yum_baseurl_pro`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the URL of the yum repository (Pro edition).
 
-Default value: `'https://jfrog.bintray.com/artifactory-pro-rpms'`
+Default value: `undef`
 
 ##### <a name="-artifactory--yum_name"></a>`yum_name`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Sets the name of the yum repository.
 
-Default value: `'bintray-jfrog-artifactory-rpms'`
+Default value: `undef`
 

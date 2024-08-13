@@ -1,1 +1,21 @@
---- {}
+---
+artifactory::archive_data_dir: '/opt/artifactory-data'
+artifactory::archive_install_dir: '/opt'
+artifactory::artifactory_home: '/var/opt/jfrog/artifactory'
+artifactory::config_group: 'artifactory'
+artifactory::config_owner: 'artifactory'
+artifactory::db_automate: false
+artifactory::download_filename: 'jfrog-artifactory-%s-%s-linux.tar.gz'
+artifactory::download_url_oss: 'https://releases.jfrog.io/artifactory/bintray-artifactory/org/artifactory/oss/jfrog-artifactory-oss/%s/%s'
+artifactory::download_url_pro: 'https://releases.jfrog.io/artifactory/artifactory-pro/org/artifactory/pro/jfrog-artifactory-pro/%s/%s'
+artifactory::edition: 'oss'
+artifactory::install_method: 'package'
+artifactory::install_service_script: 'app/bin/installService.sh'
+artifactory::manage_repo: true
+artifactory::package_name: 'jfrog-artifactory-oss'
+artifactory::package_name_pro: 'jfrog-artifactory-pro'
+artifactory::package_version: 'present'
+artifactory::root_password: 'password'
+artifactory::service_name: 'artifactory'
+artifactory::symlink_name: 'artifactory'
+artifactory::use_temp_db_secrets: true

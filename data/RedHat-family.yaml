@@ -1,0 +1,4 @@
+---
+artifactory::yum_baseurl: 'https://jfrog.bintray.com/artifactory-rpms'
+artifactory::yum_baseurl_pro: 'https://jfrog.bintray.com/artifactory-pro-rpms'
+artifactory::yum_name: 'bintray-jfrog-artifactory-rpms'

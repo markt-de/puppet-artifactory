@@ -7,29 +7,23 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with artifactory](#setup)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with artifactory](#beginning-with-artifactory)
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
+1. [Usage](#usage)
+    - [Basic usage](#basic-usage)
+    - [Archive installation](#archive-installation)
+    - [Complex example](#complex-example)
+    - [Commercial editions](#commercial-editions)
+1. [Reference](#reference)
+1. [Development](#development)
+    - [Contributing](#contributing)
+1. [License](#license)
 
 ## Overview
 
-This will install Artifactory OSS or PRO.
+This module installs and configures JFrog Artifactory. Both the open source and commercial editions are supported.
+
 Artifactory 7+ is supported, legacy support for Artifactory 6 is still available.
 
-Github and gitlab are great for storing source control, but bad at storing installers and compiled packages.
-
-This is where Artifactory comes in. It stores all of your organizations artifacts in an organized and secure manner.
-
-## Module Description
-
-This module manages the installation and configuration of Artifactory.
-
-## Setup
+## Usage
 
 ### Basic usage
 
@@ -40,6 +34,21 @@ class { 'artifactory':
   package_version => '7.90.7',
 }
 ```
+
+By default this module will install Artifactory from official RPM/DEB packages.
+
+### Archive installation
+
+It is also possible to install Artifactory from the official tar.gz archive, which provides more flexibility and customization options:
+
+```puppet
+class { 'artifactory':
+  install_method  => 'archive',
+  package_version => '7.90.7',
+}
+```
+
+The archive installation allows to customize installation paths, see [reference](#reference) for details.
 
 ### Complex example
 
@@ -60,7 +69,7 @@ class { 'artifactory':
 }
 ```
 
-### Install commercial version
+### Commercial editions
 
 To install a commercial version of Artifactory:
 
@@ -73,10 +82,6 @@ class { 'artifactory':
 }
 ```
 
-## Usage
-
-All interaction for the server is done via `artifactory`.
-
 ## Reference
 
 Classes and parameters are documented in [REFERENCE.md](REFERENCE.md).
@@ -88,3 +93,10 @@ Classes and parameters are documented in [REFERENCE.md](REFERENCE.md).
 Please use the GitHub issues functionality to report any bugs or requests for new features. Feel free to fork and submit pull requests for potential contributions.
 
 All contributions must pass all existing tests, new features should provide additional unit/acceptance tests.
+
+## License
+
+This module is a fork of fervidus/artifactory.
+
+Copyright 2024 markt.de
+Copyright 2016-2021 Bryan Belanger

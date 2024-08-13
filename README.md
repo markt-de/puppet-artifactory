@@ -27,9 +27,7 @@ This is where Artifactory comes in. It stores all of your organizations artifact
 
 ## Module Description
 
-The Artifactory module installs, configures, and manages the Artifactory open source binary repository.
-
-The Artifactory module manages both the installation and database configuration of Artifactory OSS.
+This module manages the installation and configuration of Artifactory.
 
 ## Setup
 
@@ -62,31 +60,6 @@ class { 'artifactory':
   binary_provider_cache_maxsize  => $binary_provider_cache_maxsize,
   binary_provider_filesystem_dir => '/var/opt/jfrog/artifactory/data/filestore',
   binary_provider_cache_dir      => '/var/opt/jfrog/artifactory/',
-}
-```
-
-### Artifactory with PostgreSQL database
-
-This installs PostgreSQL 11 and artifactory. PostgreSQL 12 isn't supported yet
-by Artifactory.
-
-```puppet
-class {'postgresql::globals':
-  version => '11',
-  manage_package_repo => true,
-}
-include postgresql::server
-
-postgresql::server::db {'artifactory':
-  user => 'artifactory',
-  password => postgresql_password('artifactory', 'RANDOM_PASSWORD_SHOULD_BE_INSERTED_HERE'),
-}
-class { 'artifactory':
-  db_type => 'postgresql',
-  db_username => 'artifactory',
-  db_password => '45y43y58y435hitr',
-  db_url      => 'jdbc:postgresql:127.0.0.1:5432/artifactory',
-  require     => Postgresql::Server::Db['artifactory']
 }
 ```
 

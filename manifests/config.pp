@@ -274,17 +274,4 @@ class artifactory::config {
       mode    => '0664',
     }
   }
-
-  # Automatically setup the database server.
-  if ($artifactory::db_automate) and ($artifactory::db_type == 'mysql') {
-    include artifactory::mysql
-
-    file_line { 'limits':
-      ensure => present,
-      path   => '/etc/security/limits.conf',
-      line   => "artifactory soft nofile 32000 \n artifactory hard nofile 32000",
-      notify => Class['artifactory::service'],
-    }
-    contain mysql::server
-  }
 }

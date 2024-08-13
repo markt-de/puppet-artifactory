@@ -157,30 +157,6 @@ describe 'artifactory' do
           end
         end
 
-        context 'mysql automated database' do
-          let(:params) do
-            {
-              'db_automate' => true,
-              'db_type'     => 'mysql',
-              'root_password' => 'password',
-              'db_username' => 'artifactory',
-              'db_password' => 'password',
-            }
-          end
-
-          it { is_expected.to compile.with_all_deps }
-          it {
-            is_expected.to contain_class('mysql::server').with(
-              'package_name'            => 'mariadb-server',
-              'package_ensure'          => '5.5.60-1.el7_5',
-              'remove_default_accounts' => true,
-              'root_password'           => 'password',
-              # 'password' => 'password',
-              # 'user' => 'user',
-            )
-          }
-        end
-
         context 'running a legacy version (pre v7)' do
           let(:params) do
             {

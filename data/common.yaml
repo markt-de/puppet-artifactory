@@ -4,7 +4,6 @@ artifactory::archive_install_dir: '/opt'
 artifactory::artifactory_home: '/var/opt/jfrog/artifactory'
 artifactory::config_group: 'artifactory'
 artifactory::config_owner: 'artifactory'
-artifactory::db_automate: false
 artifactory::download_filename: 'jfrog-artifactory-%s-%s-linux.tar.gz'
 artifactory::download_url_oss: 'https://releases.jfrog.io/artifactory/bintray-artifactory/org/artifactory/oss/jfrog-artifactory-oss/%s/%s'
 artifactory::download_url_pro: 'https://releases.jfrog.io/artifactory/artifactory-pro/org/artifactory/pro/jfrog-artifactory-pro/%s/%s'

@@ -53,9 +53,6 @@
 # @param config_owner
 #   Specifies the owner of the configuration files.
 #
-# @param db_automate
-#   Set to 'true' to let Puppet create a database (instance). Only supports MySQL.
-#
 # @param db_password
 #   The password for the database account. Only required for database configuration.
 #
@@ -153,7 +150,6 @@ class artifactory (
   String $artifactory_home,
   String $config_owner,
   String $config_group,
-  Boolean $db_automate,
   String $download_filename,
   String $download_url_oss,
   String $download_url_pro,

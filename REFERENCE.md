@@ -16,7 +16,6 @@
 * `artifactory::install`: Call the configured installation class
 * `artifactory::install::archive`: Install artifactory from archive
 * `artifactory::install::package`: Install artifactory from package
-* `artifactory::mysql`: Manage a MySQL server instance
 * `artifactory::repo`: Pull in the platform specific repo classes
 * `artifactory::repo::apt`: Setup APT repository on Debian-based distributions
 * `artifactory::repo::yum`: Setup YUM repository on RedHat-based distributions
@@ -48,7 +47,6 @@ The following parameters are available in the `artifactory` class:
 * [`binary_provider_type`](#-artifactory--binary_provider_type)
 * [`config_group`](#-artifactory--config_group)
 * [`config_owner`](#-artifactory--config_owner)
-* [`db_automate`](#-artifactory--db_automate)
 * [`db_password`](#-artifactory--db_password)
 * [`db_type`](#-artifactory--db_type)
 * [`db_url`](#-artifactory--db_url)
@@ -200,12 +198,6 @@ Specifies the group owner of the configuration files.
 Data type: `String`
 
 Specifies the owner of the configuration files.
-
-##### <a name="-artifactory--db_automate"></a>`db_automate`
-
-Data type: `Boolean`
-
-Set to 'true' to let Puppet create a database (instance). Only supports MySQL.
 
 ##### <a name="-artifactory--db_password"></a>`db_password`
 

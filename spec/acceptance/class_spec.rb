@@ -1,9 +1,8 @@
 require 'spec_helper_acceptance'
 
 describe 'artifactory class' do
-  context 'default parameters' do
-    # Using puppet_apply as a helper
-    it 'works idempotently with no errors' do
+  context 'with default parameters' do
+    it 'works with no errors' do
       pp = <<-ARTIFACTORY_TEST
       class { 'artifactory': }
       ARTIFACTORY_TEST
@@ -26,21 +25,32 @@ describe 'artifactory class' do
     end
   end
 
-  context 'with postgresql' do # , if: fact('os.release.major') == '7' do
-    it 'works idempotently with no errors' do
+  context 'with postgresql' do
+    it 'works with no errors' do
       pp = <<-PUPPETCODE
+      if $facts['os']['family'] == 'RedHat' {
+        package { 'postgresql':
+          ensure   => 'disabled',
+          provider => 'dnfmodule',
+        }
+      }
+
       class {'postgresql::globals':
-        version => '11',
+        encoding            => 'UTF-8',
+        locale              => 'en_US.UTF-8',
+        manage_dnf_module   => false,
         manage_package_repo => true,
+        needs_initdb        => true,
+        version             => '13',
       }
       include postgresql::server
 
       postgresql::server::db {'artifactory':
-        user => 'artifactory',
-        password => postgresql_password('artifactory', '45y43y58y435hitr'),
+        user     => 'artifactory',
+        password => postgresql::postgresql_password('artifactory', '45y43y58y435hitr'),
       }
       class { 'artifactory':
-        db_type => 'postgresql',
+        db_type     => 'postgresql',
         db_username => 'artifactory',
         db_password => '45y43y58y435hitr',
         db_url      => 'jdbc:postgresql:127.0.0.1:5432/artifactory',

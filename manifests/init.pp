@@ -105,7 +105,9 @@
 #   Sets the package name to install (Pro edition).
 #
 # @param package_version
-#   Specifies the package version.
+#   Specifies the package version. It is highly recommended to set it to
+#   a real version number. Setting the value to `present` may lead to a
+#   broken config.
 #
 # @param pool_max_active
 #   Maximum number of pooled database connections.

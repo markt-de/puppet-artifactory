@@ -4,7 +4,9 @@ describe 'artifactory class' do
   context 'with default parameters' do
     it 'works with no errors' do
       pp = <<-ARTIFACTORY_TEST
-      class { 'artifactory': }
+      class { 'artifactory':
+        package_version => '7.90.7',
+      }
       ARTIFACTORY_TEST
 
       # Run it twice and test for idempotency
@@ -49,12 +51,14 @@ describe 'artifactory class' do
         user     => 'artifactory',
         password => postgresql::postgresql_password('artifactory', '45y43y58y435hitr'),
       }
+
       class { 'artifactory':
-        db_type     => 'postgresql',
-        db_username => 'artifactory',
-        db_password => '45y43y58y435hitr',
-        db_url      => 'jdbc:postgresql:127.0.0.1:5432/artifactory',
-        require     => Postgresql::Server::Db['artifactory']
+        db_type         => 'postgresql',
+        db_username     => 'artifactory',
+        db_password     => '45y43y58y435hitr',
+        db_url          => 'jdbc:postgresql:127.0.0.1:5432/artifactory',
+        package_version => '7.90.7',
+        require         => Postgresql::Server::Db['artifactory']
       }
       PUPPETCODE
 

@@ -13,7 +13,6 @@ artifactory::install_service_script: 'app/bin/installService.sh'
 artifactory::manage_repo: true
 artifactory::package_name: 'jfrog-artifactory-oss'
 artifactory::package_name_pro: 'jfrog-artifactory-pro'
-artifactory::package_version: 'present'
 artifactory::root_password: 'password'
 artifactory::service_name: 'artifactory'
 artifactory::symlink_name: 'artifactory'

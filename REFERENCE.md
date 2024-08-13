@@ -316,7 +316,9 @@ Sets the package name to install (Pro edition).
 
 Data type: `String`
 
-Specifies the package version.
+Specifies the package version. It is highly recommended to set it to
+a real version number. Setting the value to `present` may lead to a
+broken config.
 
 ##### <a name="-artifactory--pool_max_active"></a>`pool_max_active`
 

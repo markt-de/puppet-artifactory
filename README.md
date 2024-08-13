@@ -31,21 +31,17 @@ This module manages the installation and configuration of Artifactory.
 
 ## Setup
 
-### Beginning with artifactory
+### Basic usage
 
-If you want a server installed with the default options you can run
-`include 'artifactory'`.
-
-However, it is strongly recommended to specify the desired version of Artifactory:
+To setup Artifactory with default options only the desired version needs to be specified:
 
 ```puppet
 class { 'artifactory':
-  package_version => '7.4.3',
+  package_version => '7.90.7',
+}
 ```
 
-This ensures that the module behaves correctly and does not enable obsolete features for your version of Artifactory.
-
-If you need to add database connectivity instantiate with the required parameters:
+### Complex example
 
 ```puppet
 class { 'artifactory':
@@ -55,6 +51,7 @@ class { 'artifactory':
   db_username                    => 'my_username',
   db_password                    => 'efw23gn2j3',
   binary_provider_type           => 'filesystem',
+  package_version                => '7.90.7',
   pool_max_active                => 100,
   pool_max_idle                  => 10,
   binary_provider_cache_maxsize  => $binary_provider_cache_maxsize,
@@ -69,8 +66,9 @@ To install a commercial version of Artifactory:
 
 ```puppet
 class { 'artifactory':
-  edition     => 'pro',
-  license_key => 'ABCDEFG1234567890',
+  edition         => 'pro',
+  license_key     => 'ABCDEFG1234567890',
+  package_version => '7.90.7',
   ...
 }
 ```

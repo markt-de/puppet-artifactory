@@ -10,8 +10,8 @@
 1. [Usage](#usage)
     - [Basic usage](#basic-usage)
     - [Archive installation](#archive-installation)
-    - [Complex example](#complex-example)
     - [Commercial editions](#commercial-editions)
+    - [Complex example](#complex-example)
 1. [Reference](#reference)
 1. [Development](#development)
     - [Contributing](#contributing)
@@ -21,7 +21,7 @@
 
 This module installs and configures JFrog Artifactory. Both the open source and commercial editions are supported.
 
-Artifactory 7+ is supported, legacy support for Artifactory 6 is still available.
+Artifactory 7+ is recommended, but legacy support for Artifactory 6 is still available.
 
 ## Usage
 
@@ -50,25 +50,6 @@ class { 'artifactory':
 
 The archive installation allows to customize installation paths, see [reference](#reference) for details.
 
-### Complex example
-
-```puppet
-class { 'artifactory':
-  jdbc_driver_url                => 'puppet:///modules/my_module/mysql.jar',
-  db_type                        => 'oracle',
-  db_url                         => 'jdbc:oracle:thin:@somedomain.com:1521:arti001',
-  db_username                    => 'my_username',
-  db_password                    => 'efw23gn2j3',
-  binary_provider_type           => 'filesystem',
-  package_version                => '7.90.7',
-  pool_max_active                => 100,
-  pool_max_idle                  => 10,
-  binary_provider_cache_maxsize  => $binary_provider_cache_maxsize,
-  binary_provider_filesystem_dir => '/var/opt/jfrog/artifactory/data/filestore',
-  binary_provider_cache_dir      => '/var/opt/jfrog/artifactory/',
-}
-```
-
 ### Commercial editions
 
 To install a commercial version of Artifactory:
@@ -79,6 +60,25 @@ class { 'artifactory':
   license_key     => 'ABCDEFG1234567890',
   package_version => '7.90.7',
   ...
+}
+```
+
+### Complex example
+
+```puppet
+class { 'artifactory':
+  binary_provider_type           => 'filesystem',
+  binary_provider_cache_dir      => '/var/opt/jfrog/artifactory/',
+  binary_provider_cache_maxsize  => $binary_provider_cache_maxsize,
+  binary_provider_filesystem_dir => '/var/opt/jfrog/artifactory/data/filestore',
+  db_type                        => 'oracle',
+  db_url                         => 'jdbc:oracle:thin:@somedomain.com:1521:arti001',
+  db_username                    => 'my_username',
+  db_password                    => 'efw23gn2j3',
+  jdbc_driver_url                => 'puppet:///modules/my_module/mysql.jar',
+  package_version                => '7.90.7',
+  pool_max_active                => 100,
+  pool_max_idle                  => 10,
 }
 ```
 
@@ -98,5 +98,6 @@ All contributions must pass all existing tests, new features should provide addi
 
 This module is a fork of fervidus/artifactory.
 
-Copyright 2024 markt.de
+Copyright 2024 markt.de GmbH & Co. KG
+
 Copyright 2016-2021 Bryan Belanger

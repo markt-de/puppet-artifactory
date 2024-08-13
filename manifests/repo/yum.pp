@@ -3,10 +3,12 @@
 class artifactory::repo::yum {
   if $artifactory::manage_repo {
     case $artifactory::edition {
-      'enterprise', 'pro' : {
+      'enterprise', 'pro': {
+        $_gpg = $artifactory::yum_gpgkey_pro
         $_url = $artifactory::yum_baseurl_pro
       }
-      default : {
+      default: {
+        $_gpg = $artifactory::yum_gpgkey
         $_url = $artifactory::yum_baseurl
       }
     }
@@ -17,7 +19,7 @@ class artifactory::repo::yum {
       descr    => $artifactory::yum_name,
       gpgcheck => 1,
       enabled  => 1,
-      gpgkey   => "${_url}/repodata/repomd.xml.key",
+      gpgkey   => $_gpg,
     }
   }
 }

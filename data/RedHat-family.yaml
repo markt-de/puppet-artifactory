@@ -1,4 +1,6 @@
 ---
 artifactory::yum_baseurl: 'https://jfrog.bintray.com/artifactory-rpms'
 artifactory::yum_baseurl_pro: 'https://jfrog.bintray.com/artifactory-pro-rpms'
+artifactory::yum_gpgkey: 'https://jfrog.bintray.com/artifactory-rpms/repodata/repomd.xml.key'
+artifactory::yum_gpgkey_pro: 'https://jfrog.bintray.com/artifactory-pro-rpms/repodata/repomd.xml.key'
 artifactory::yum_name: 'bintray-jfrog-artifactory-rpms'

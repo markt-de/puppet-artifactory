@@ -138,6 +138,12 @@
 # @param yum_baseurl_pro
 #   Sets the URL of the yum repository (Pro edition).
 #
+# @param yum_gpgkey
+#   Sets the gpgkey URL of the yum repository.
+#
+# @param yum_gpgkey_pro
+#   Sets the gpgkey URL of the yum repository (Pro edition).
+#
 # @param yum_name
 #   Sets the name of the yum repository.
 #
@@ -184,6 +190,8 @@ class artifactory (
   Optional[Integer] $pool_max_idle = undef,
   Optional[String] $yum_baseurl = undef,
   Optional[String] $yum_baseurl_pro = undef,
+  Optional[String] $yum_gpgkey = undef,
+  Optional[String] $yum_gpgkey_pro = undef,
   Optional[String] $yum_name = undef,
 ) {
   # Artifactory's data directory depends on the installation method.

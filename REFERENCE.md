@@ -74,6 +74,8 @@ The following parameters are available in the `artifactory` class:
 * [`use_temp_db_secrets`](#-artifactory--use_temp_db_secrets)
 * [`yum_baseurl`](#-artifactory--yum_baseurl)
 * [`yum_baseurl_pro`](#-artifactory--yum_baseurl_pro)
+* [`yum_gpgkey`](#-artifactory--yum_gpgkey)
+* [`yum_gpgkey_pro`](#-artifactory--yum_gpgkey_pro)
 * [`yum_name`](#-artifactory--yum_name)
 
 ##### <a name="-artifactory--apt_baseurl"></a>`apt_baseurl`
@@ -381,6 +383,22 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 Sets the URL of the yum repository (Pro edition).
+
+Default value: `undef`
+
+##### <a name="-artifactory--yum_gpgkey"></a>`yum_gpgkey`
+
+Data type: `Optional[String]`
+
+Sets the gpgkey URL of the yum repository.
+
+Default value: `undef`
+
+##### <a name="-artifactory--yum_gpgkey_pro"></a>`yum_gpgkey_pro`
+
+Data type: `Optional[String]`
+
+Sets the gpgkey URL of the yum repository (Pro edition).
 
 Default value: `undef`
 

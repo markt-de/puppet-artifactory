@@ -6,7 +6,13 @@ describe 'artifactory' do
       context "on #{os}" do
         let(:facts) { os_facts.merge('root_home' => '/root') }
 
-        context 'artifactory class without any parameters' do
+        context 'artifactory with default config' do
+          let(:params) do
+            {
+              'package_version' => '7.90.7',
+            }
+          end
+
           it { is_expected.to compile.with_all_deps }
 
           it { is_expected.to contain_class('artifactory::install').that_comes_before('Class[artifactory::config]') }
@@ -14,7 +20,7 @@ describe 'artifactory' do
           it { is_expected.to contain_class('artifactory::service') } # .that_subscribes_to('Class[artifactory::config]') }
 
           it { is_expected.to contain_service('artifactory') }
-          it { is_expected.to contain_package('jfrog-artifactory-oss').with_ensure('present') }
+          it { is_expected.to contain_package('jfrog-artifactory-oss').with_ensure('7.90.7') }
 
           it { is_expected.to contain_class('artifactory') }
           case os_facts[:os]['family']
@@ -41,17 +47,18 @@ describe 'artifactory' do
           end
         end
 
-        context 'artifactory class with master_key parameter' do
+        context 'artifactory with master_key parameter' do
           let(:params) do
             {
               'master_key' => 'masterkey',
+              'package_version' => '7.90.7',
             }
           end
 
           it { is_expected.to compile.with_all_deps }
 
           it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/security/master.key').with(
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/artifactory/security/master.key').with(
               'content' => 'masterkey',
               'mode' => '0640',
               'owner' => 'artifactory',
@@ -60,22 +67,22 @@ describe 'artifactory' do
           }
         end
 
-        context 'artifactory class with jdbc_driver_url parameter' do
+        context 'artifactory with jdbc_driver_url parameter' do
           let(:params) do
             {
-              # super().merge('artifactory_home' => '/var/opt/jfrog/artifactory')
-              'jdbc_driver_url' => 'puppet:///modules/my_module/mysql.jar',
+              'db_password' => 'password',
               'db_url' => 'oracle://some_url',
               'db_username' => 'username',
-              'db_password' => 'password',
               'db_type' => 'oracle',
+              'jdbc_driver_url' => 'puppet:///modules/my_module/mysql.jar',
+              'package_version' => '7.90.7',
             }
           end
 
           it { is_expected.to compile.with_all_deps }
 
           it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/tomcat/lib/mysql.jar').with(
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/bootstrap/artifactory/tomcat/lib/mysql.jar').with(
               'source' => 'puppet:///modules/my_module/mysql.jar',
               'mode' => '0775',
               'owner' => 'root',
@@ -83,14 +90,50 @@ describe 'artifactory' do
           }
 
           it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/.secrets/.temp.db.properties').with(
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/artifactory/.secrets/.temp.db.properties').with(
               'ensure' => 'file',
               'mode' => '0640',
               'owner' => 'artifactory',
               'group' => 'artifactory',
             )
           }
+        end
 
+        context 'running a legacy version (pre v7)' do
+          let(:params) do
+            {
+              'package_version' => '6.0.0',
+              'use_temp_db_secrets' => true,
+            }
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it {
+            is_expected.to contain_package('jfrog-artifactory-oss').with(
+              'ensure' => '6.0.0',
+            )
+          }
+          it {
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').with_content(%r{chain template="file-system"})
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<provider id="file-system" type="file-system">})
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<fileStoreDir>})
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<baseDataDir>})
+          }
+        end
+
+        context 'running a legacy version (pre v7) with jdbc_driver_url parameter' do
+          let(:params) do
+            {
+              'db_password' => 'password',
+              'db_url' => 'oracle://some_url',
+              'db_username' => 'username',
+              'db_type' => 'oracle',
+              'jdbc_driver_url' => 'puppet:///modules/my_module/mysql.jar',
+              'package_version' => '6.0.0',
+            }
+          end
+
+          it { is_expected.to compile.with_all_deps }
           it {
             is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/storage.properties').with(
               'ensure' => 'link',
@@ -99,41 +142,33 @@ describe 'artifactory' do
           }
         end
 
-        context 'artifactory class with use_temp_db_secrets set to false' do
+        context 'running a legacy version (pre v7) with use_temp_db_secrets set to false' do
           let(:params) do
             {
-              'use_temp_db_secrets' => false,
-              # super().merge('artifactory_home' => '/var/opt/jfrog/artifactory')
-              'jdbc_driver_url' => 'puppet:///modules/my_module/mysql.jar',
-              'db_url' => 'oracle://some_url',
-              'db_username' => 'foouser',
               'db_password' => 'foopw',
               'db_type' => 'oracle',
+              'db_url' => 'oracle://some_url',
+              'db_username' => 'foouser',
+              'jdbc_driver_url' => 'puppet:///modules/my_module/mysql.jar',
+              'package_version' => '6.0.0',
+              'use_temp_db_secrets' => false,
             }
           end
 
           it { is_expected.to compile.with_all_deps }
 
           it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/tomcat/lib/mysql.jar').with(
-              'source' => 'puppet:///modules/my_module/mysql.jar',
-              'mode' => '0775',
-              'owner' => 'root',
+            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/storage.properties').with(
+              'ensure' => 'link',
+              'target' => '/var/opt/jfrog/artifactory/etc/db.properties',
             )
           }
-
           it {
             is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/db.properties').with(
               'ensure' => 'file',
               'mode' => '0640',
               'owner' => 'artifactory',
               'group' => 'artifactory',
-            )
-          }
-          it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/storage.properties').with(
-              'ensure' => 'link',
-              'target' => '/var/opt/jfrog/artifactory/etc/db.properties',
             )
           }
           it do
@@ -157,38 +192,17 @@ describe 'artifactory' do
           end
         end
 
-        context 'running a legacy version (pre v7)' do
-          let(:params) do
-            {
-              'package_version' => '6.0.0',
-            }
-          end
-
-          it { is_expected.to compile.with_all_deps }
-          it {
-            is_expected.to contain_package('jfrog-artifactory-oss').with(
-              'ensure' => '6.0.0',
-            )
-          }
-          it {
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').with_content(%r{chain template="file-system"})
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<provider id="file-system" type="file-system">})
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<fileStoreDir>})
-            is_expected.to contain_file('/var/opt/jfrog/artifactory/etc/binarystore.xml').without_content(%r{<baseDataDir>})
-          }
-        end
-
         context 'running a current version' do
           let(:params) do
             {
-              'package_version' => '7.4.3',
+              'package_version' => '7.90.7',
             }
           end
 
           it { is_expected.to compile.with_all_deps }
           it {
             is_expected.to contain_package('jfrog-artifactory-oss').with(
-              'ensure' => '7.4.3',
+              'ensure' => '7.90.7',
             )
           }
           it {
@@ -202,7 +216,7 @@ describe 'artifactory' do
         context 'running a current version with a custom binary filesystem dir' do
           let(:params) do
             {
-              'package_version' => '7.4.3',
+              'package_version' => '7.90.7',
               'binary_provider_filesystem_dir' => '/opt/artifactory-filestore',
             }
           end
@@ -218,7 +232,7 @@ describe 'artifactory' do
         context 'running a current version with a custom binary base data dir' do
           let(:params) do
             {
-              'package_version' => '7.4.3',
+              'package_version' => '7.90.7',
               'binary_provider_base_data_dir' => '/opt/artifactory-data',
             }
           end
@@ -233,7 +247,7 @@ describe 'artifactory' do
         context 'running a current version with s3 storage provider' do
           let(:params) do
             {
-              'package_version' => '7.4.3',
+              'package_version' => '7.90.7',
               'binary_provider_type' => 's3',
               'binary_provider_config_hash' => {
                 'endpoint' => 's3.amazonaws.com',

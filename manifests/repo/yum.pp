@@ -1,5 +1,5 @@
-# == Class artifactory::repo::yum
-#
+# @summary Setup YUM repository on RedHat-based distributions
+# @api private
 class artifactory::repo::yum {
   if $artifactory::manage_repo {
     case $artifactory::edition {

@@ -1,7 +1,5 @@
-# == Class artifactory::config
-#
-# This class is called from artifactory for service config.
-#
+# @summary Manage Artifactory configuration.
+# @api private
 class artifactory::config {
   # Artifactory 7 introduced several breaking changes.
   # When no version number is specified, we have no choice but to guess.

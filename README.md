@@ -36,12 +36,12 @@ The Artifactory module manages both the installation and database configuration 
 ### Beginning with artifactory
 
 If you want a server installed with the default options you can run
-`include '::artifactory'`.
+`include 'artifactory'`.
 
 However, it is strongly recommended to specify the desired version of Artifactory:
 
 ```puppet
-class { '::artifactory':
+class { 'artifactory':
   package_version => '7.4.3',
 ```
 
@@ -50,7 +50,7 @@ This ensures that the module behaves correctly and does not enable obsolete feat
 If you need to add database connectivity instantiate with the required parameters:
 
 ```puppet
-class { '::artifactory':
+class { 'artifactory':
   jdbc_driver_url                => 'puppet:///modules/my_module/mysql.jar',
   db_type                        => 'oracle',
   db_url                         => 'jdbc:oracle:thin:@somedomain.com:1521:arti001',
@@ -95,7 +95,7 @@ class { 'artifactory':
 To install a commercial version of Artifactory:
 
 ```puppet
-class { '::artifactory':
+class { 'artifactory':
   edition     => 'pro',
   license_key => 'ABCDEFG1234567890',
   ...
@@ -104,151 +104,16 @@ class { '::artifactory':
 
 ## Usage
 
-All interaction for the server is done via `::artifactory`.
+All interaction for the server is done via `artifactory`.
 
 ## Reference
 
-### Classes
-
-#### Public classes
-
-* [`artifactory`](#artifactoryserver): Installs and configures Artifactory.
-
-#### Private classes
-
-* `artifactory::yum`: Installs yum configuration.
-* `artifactory::install`: Installs packages.
-* `artifactory::config`: Configures Artifactory.
-* `artifactory::service`: Manages service.
-* `artifactory::mysql`: Manages an automated mysql database
-
-### Parameters
-
-#### artifactory
-
-##### `yum_name`
-
-Sets the name of the yum repository. Defaults to 'bintray-jfrog-artifactory-rpms'.
-
-This can be changed if Artifactory needs to be setup from a different repository. Typically this is done if an organization has a 'trusted' yum repo.
-
-##### `yum_baseurl`
-
-Sets the base url of the yum repository to name. Defaults to 'http://jfrog.bintray.com/artifactory-rpms'.
-
-This can be changed if Artifactory needs to be setup from a different repository. Typically this is done if an organization has a 'trusted' yum repo.
-
-##### `package_name`
-
-Sets the package name to install. Defaults to 'jfrog-artifactory-oss'.
-
-This can be changed if Artifactory needs to install a differently named package. Possibly needed if na organization creates their own Artifactory package.
-
-##### `package_version`
-
-Sets the package version to. Defaults to 'present'.
-
-This can be changed if you need to install a specific version. It takes the same values allowed for the `ensure` parameter of the standard `package` resource type.
-
-##### `root_password`
-
-Sets the root password for Puppet managed mysql database
-
-##### `jdbc_driver_url`
-
-Sets the location for the jdbc driver. The built-in `file` type is used to retrieve the driver.
-
-This is required if using a new data source.
-
-##### `use_temp_db_secrets`
-
-Set to true(default) if you want Artifactory to delete temporary db.properties file on service start.
-<https://www.jfrog.com/confluence/display/RTF/Configuring+Security#ConfiguringSecurity-HardeningSecurityforSecrets>
-
-Set to false if you would like db.properties file to be written to ${::artifactory::artifactory_home}/etc/db.properties
-and managed with Augeas, taking into account Artifactory encrypts password field on startup. Management with Augeas
-allows user to add additional database and storage options to db.properties without Puppet touching.
-
-##### `db_automate`
-
-Set to 'true' if you want Puppet to create a database. Only works with **mysql**. If `true`, we recommend using JDBC connector version 5.1.24. NOTE: Puppet may throw an error the first run while it waits for Artifactory to connect to database
-
-##### `db_type`
-
-Only required for database configuration. The type of database to configure for. Valid values are 'mariadb', 'mssql', 'mysql', 'oracle', 'postgresql'.
-
-##### `db_url`
-
-Only required for database configuration. The url of the database.
-
-##### `db_username`
-
-Only required for database configuration. The username for the database account.
-
-##### `db_password`
-
-Only required for database configuration. The password for the database account.
-
-##### `binary_provider_type`
-
-Optional setting for the binary storage provider. The type of database to configure for. Valid values are 'filesystem', 'fullDb', 'cachedFS', 'S3'. Defaults to 'filesystem'.
-
-###### filesystem (default)
-
-This means that metadata is stored in the database, but binaries are stored in the file system. The default location is under $ARTIFACTORY_HOME/data/filestore however this can be modified.
-
-###### fullDb
-
-All the metadata and the binaries are stored as BLOBs in the database, objects are cached as in cachedFS.
-
-###### cachedFS
-
-Works the same way as filesystem but also has a binary LRU (Least Recently Used) cache for upload/download requests. Improves performance of instances with high IOPS (I/O Operations) or slow NFS access.
-
-###### S3
-
-This is the setting used for S3 Object Storage.
-
-###### fullDbDirect
-
-All the metadata and the binaries are stored as BLOBs in the database. No caching occurs.
-
-##### `pool_max_active`
-
-Optional setting for the maximum number of pooled database connections. Defaults to 100.
-
-##### `pool_max_idle`
-
-Optional setting for the maximum number of pooled idle database connections Defaults to 10.
-
-##### `binary_provider_cache_maxsize`
-
-Optional setting for the maximum cache size. This value specifies the maximum cache size (in bytes) to allocate on the system for caching BLOBs.
-
-##### `binary_provider_base_data_dir`
-
-Optional setting for the artifactory filestore base location. Defaults to '$ARTIFACTORY_HOME/data'.
-
-##### `binary_provider_filesystem_dir`
-
-Optional setting for the artifactory filestore location. If the binary.provider.type is set to filesystem this value specifies the location of the binaries in combination with binary_provider_base_data_dir. Defaults to 'filestore'.
-
-##### `binary_provider_cache_dir`
-
-Optional setting for the location of the cache. This should be set to your $ARTIFACTORY_HOME directory directly (not on the NFS).
-
-##### `master_key`
-
-Optional setting for the master key that Artifactory uses to connect to the database. If specified, it ensures that if your node terminates, a new one can be spun up that can connect to the same database as before. Otherwise, Artifactory will generate a new master key on first run.
-
-##### `config_owner`
-
-Optional argument to set the ownership of the configuration files.
-
-##### `config_group`
-
-Optional argument to set the group of the configuration files.
+Classes and parameters are documented in [REFERENCE.md](REFERENCE.md).
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
+### Contributing
+
+Please use the GitHub issues functionality to report any bugs or requests for new features. Feel free to fork and submit pull requests for potential contributions.
+
+All contributions must pass all existing tests, new features should provide additional unit/acceptance tests.

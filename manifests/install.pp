@@ -1,7 +1,5 @@
-# == Class artifactory::install
-#
-# This class is called from artifactory for install.
-#
+# @summary Call the configured installation class
+# @api private
 class artifactory::install {
   case $artifactory::install_method {
     'package': {

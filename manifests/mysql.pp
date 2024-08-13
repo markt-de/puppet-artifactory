@@ -1,4 +1,5 @@
-# Manages mysql server if automated
+# @summary Manage a MySQL server instance
+# @api private
 class artifactory::mysql {
   class { 'mysql::server':
     package_name            => 'mariadb-server',

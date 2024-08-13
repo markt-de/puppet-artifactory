@@ -1,6 +1,4 @@
-# == Class artifactory::repo::apt
-#
-# @summary Set up the apt repo on Debian-based distros
+# @summary Setup APT repository on Debian-based distributions
 # @api private
 class artifactory::repo::apt () {
   assert_private()
